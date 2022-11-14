@@ -23,13 +23,11 @@ class Repository ():
         cursor.execute(query, query_args)
         
     @cursor_handler
-    def get_today_birthdays(self, cursor, user_id):
-        query = """SELECT name 
+    def get_today_birthdays(self, cursor):
+        query = """SELECT user_id, name  
                             FROM birthday_friends 
-                            WHERE date = CURDATE()
-                            AND user_id = %s"""
-        query_args = (user_id, )                    
-        cursor.execute(query, query_args)
+                            WHERE DAY(date) = DAY(CURDATE()) AND MONTH(date) = MONTH(CURDATE())"""      
+        cursor.execute(query)
         return cursor.fetchall() 
         
     @cursor_handler
@@ -37,6 +35,16 @@ class Repository ():
         query = """SELECT name, date 
                             FROM birthday_friends 
                             WHERE user_id = %s"""
+        query_args = (user_id, )                    
+        cursor.execute(query, query_args)
+        return cursor.fetchall() 
+    
+    @cursor_handler
+    def check_user_id(self, cursor, user_id):
+        query = """SELECT user_id 
+                            FROM birthday_friends 
+                            WHERE user_id = %s
+                            LIMIT 1"""
         query_args = (user_id, )                    
         cursor.execute(query, query_args)
         return cursor.fetchall() 
