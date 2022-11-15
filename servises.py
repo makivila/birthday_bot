@@ -49,7 +49,7 @@ class Service():
             answer = 'Bot is working'
         else:
             answer ='''Please, add date and name your friend which birthday you want to remember.
-Example: Ivanov Ivan - 1999/01/01'''
+Example: Ivanov Ivan - 2000/06/24'''
         return answer
 
 
