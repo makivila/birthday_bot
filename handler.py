@@ -1,6 +1,7 @@
-import time
 import threading
 import os
+import time
+from datetime import datetime
 from errors import IncorrectFormatException
 
 
@@ -54,17 +55,20 @@ class Handler:
     def notification(self):
         while True:
             try:
-                try:
-                    result = self.servises.get_today_birthdays()
-                except Exception as e:
-                    self.bot.send_message(os.getenv("ADMIN_USER_ID"), e)
-                if result:
-                    for data in result:
-                        self.bot.send_message(data.user_id, data.name_str)
-                time.sleep(43200)
+                now = datetime.now() 
+                current_time = now.strftime("%H:%M")
+                if current_time in ['09:00', '13:00', '18:00']:
+                    try:
+                        result = self.servises.get_today_birthdays()
+                    except Exception as e:
+                        self.bot.send_message(os.getenv("ADMIN_USER_ID"), e)
+                    if result:
+                        for data in result:
+                            self.bot.send_message(data.user_id, data.name_str)
+                time.sleep(60)
             except:
                 time.sleep(5)
-
+               
     def greetings(self, message):
         try:
             answer = self.servises.get_greeting_by_user_exists(message.chat.id)
