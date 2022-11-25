@@ -17,7 +17,11 @@ class Handler:
             self.init_text_handler(message)
         thread = threading.Thread(target=self.notification)
         thread.start()
-        self.bot.polling(none_stop=True, interval=0)
+        while True:
+            try:
+                self.bot.polling(none_stop=True, interval=0)
+            except:
+                time.sleep(5)
 
     def init_text_handler(self, message):
         if message.text == 'All birthday':
@@ -50,13 +54,16 @@ class Handler:
     def notification(self):
         while True:
             try:
-                result = self.servises.get_today_birthdays()
-            except Exception as e:
+                try:
+                    result = self.servises.get_today_birthdays()
+                except Exception as e:
                     self.bot.send_message(os.getenv("ADMIN_USER_ID"), e)
-            if result:
-                for data in result:
-                    self.bot.send_message(data.user_id, data.name_str)
-            time.sleep(43200)
+                if result:
+                    for data in result:
+                        self.bot.send_message(data.user_id, data.name_str)
+                time.sleep(43200)
+            except:
+                time.sleep(5)
 
     def greetings(self, message):
         try:
