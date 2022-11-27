@@ -30,7 +30,6 @@ class Handler:
         else:
             self.add_birthday_date(message)
 
-
     def add_birthday_date(self, message): 
         try:
             self.servises.add_birthday_date(message.text, message.chat.id)
@@ -42,7 +41,6 @@ class Handler:
             self.bot.send_message(os.getenv("ADMIN_USER_ID"), e)
             self.bot.send_message(message.chat.id, 'An error has occurred')
         
-
     def all_birthdays(self, message):
         try:
             answer = self.servises.get_all_birthdays(message.chat.id)
@@ -51,20 +49,22 @@ class Handler:
             self.bot.send_message(os.getenv("ADMIN_USER_ID"), e)
             self.bot.send_message(message.chat.id, 'An error has occurred')
 
-
     def notification(self):
         while True:
             try:
                 now = datetime.now() 
                 current_time = now.strftime("%H:%M")
-                if current_time in ['09:00', '13:00', '18:00']:
+                if current_time in ['09:00', '13:00', '21:57']:
                     try:
-                        result = self.servises.get_today_birthdays()
+                        result = self.servises.get_birthdays()
                     except Exception as e:
                         self.bot.send_message(os.getenv("ADMIN_USER_ID"), e)
                     if result:
                         for data in result:
-                            self.bot.send_message(data.user_id, data.name_str)
+                            try:
+                                self.bot.send_message(data.user_id, data.name_str)
+                            except: 
+                                pass
                 time.sleep(60)
             except:
                 time.sleep(5)

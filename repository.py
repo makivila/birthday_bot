@@ -22,9 +22,17 @@ class Repository ():
         
     @cursor_handler
     def get_today_birthdays(self, cursor):
-        query = """SELECT user_id, name  
+        query = """SELECT user_id, name
                             FROM birthday_friends 
                             WHERE DAY(date) = DAY(CURDATE()) AND MONTH(date) = MONTH(CURDATE())"""      
+        cursor.execute(query)
+        return cursor.fetchall() 
+
+    @cursor_handler
+    def get_tomorrow_birthdays(self, cursor):
+        query = """SELECT user_id, name
+                            FROM birthday_friends 
+                            WHERE DAY(date) = DAY(CURDATE() + 1) AND MONTH(date) = MONTH(CURDATE())"""      
         cursor.execute(query)
         return cursor.fetchall() 
         
