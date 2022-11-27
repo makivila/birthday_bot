@@ -1,12 +1,17 @@
 from utils import convert_to_date
 from errors import IncorrectFormatException
+from enums import BirthdayType
 
 
 class BirthdayData():
-  def __init__(self, user_id , name):
+  def __init__(self, user_id , name, birthday_type):
     self.user_id = user_id 
-    self.name_str = "Today’s birthday: " + name
-
+    self.birthday_type = birthday_type
+    if birthday_type == BirthdayType.today:
+        self.name_str = "Today’s birthday: " + name
+    else: 
+        self.name_str = "Tomorrow’s birthday: " + name
+    
 class Service():
     def __init__(self, repository):
         self.repository = repository
@@ -21,14 +26,16 @@ class Service():
         except:
             raise IncorrectFormatException("invalid date entered")
         self.repository.add_birthday_date(date, name, user_id)
-
-    def get_today_birthdays(self):
-        result = self.repository.get_today_birthdays()
-        birthday_datas = []
-        for data in result:
-            birthday_datas.append(BirthdayData(data[0], data[1]))
-        return birthday_datas
         
+    def get_birthdays(self):
+        today_birthdays = self.repository.get_today_birthdays()
+        tomorrow_birthdays = self.repository.get_tomorrow_birthdays()
+        birthday_datas = []
+        for data in today_birthdays:
+            birthday_datas.append(BirthdayData(data[0], data[1], BirthdayType.today))
+        for data in tomorrow_birthdays:
+            birthday_datas.append(BirthdayData(data[0], data[1], BirthdayType.tomorrow))
+        return birthday_datas
 
     def get_all_birthdays(self, user_id):
         result = self.repository.get_all_birthdays(user_id)
