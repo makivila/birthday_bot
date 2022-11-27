@@ -1,4 +1,4 @@
-from utils import is_date
+from utils import convert_to_date
 from errors import IncorrectFormatException
 
 
@@ -16,9 +16,9 @@ class Service():
         if len(name_date) != 2:
            raise IncorrectFormatException("invalid string")  
         name = name_date[0]
-        date = name_date[1]
-
-        if not is_date(date): 
+        try: 
+            date = convert_to_date(name_date[1])
+        except:
             raise IncorrectFormatException("invalid date entered")
         self.repository.add_birthday_date(date, name, user_id)
 
