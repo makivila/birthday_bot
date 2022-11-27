@@ -1,12 +1,5 @@
-import time
-
-  
-def is_date(date):
-    try:
-        time.strptime(date, '%Y/%m/%d')
-        return True
-    except ValueError:
-        return False 
+from datetime import datetime
 
 
-    
+def convert_to_date(date): 
+    return datetime.strptime(date, '%d.%m.%Y')
