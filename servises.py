@@ -4,13 +4,12 @@ from enums import BirthdayType
 
 
 class BirthdayData():
-  def __init__(self, user_id , name, birthday_type):
+  def __init__(self, user_id , name, age, birthday_type):
     self.user_id = user_id 
-    self.birthday_type = birthday_type
     if birthday_type == BirthdayType.today:
-        self.name_str = "Today’s birthday: " + name
+        self.data_str = f"Today’s birthday: {name}, age: {age}"
     else: 
-        self.name_str = "Tomorrow’s birthday: " + name
+        self.data_str = f"Tomorrow’s birthday: {name}, age: {age}"
     
 class Service():
     def __init__(self, repository):
@@ -32,9 +31,9 @@ class Service():
         tomorrow_birthdays = self.repository.get_tomorrow_birthdays()
         birthday_datas = []
         for data in today_birthdays:
-            birthday_datas.append(BirthdayData(data[0], data[1], BirthdayType.today))
+            birthday_datas.append(BirthdayData(data[0], data[1], data[2], BirthdayType.today))
         for data in tomorrow_birthdays:
-            birthday_datas.append(BirthdayData(data[0], data[1], BirthdayType.tomorrow))
+            birthday_datas.append(BirthdayData(data[0], data[1], data[2], BirthdayType.tomorrow))
         return birthday_datas
 
     def get_all_birthdays(self, user_id):
