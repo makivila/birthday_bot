@@ -58,7 +58,7 @@ class Handler:
             try:
                 now = datetime.now() 
                 current_time = now.strftime("%H:%M")
-                if current_time in ['09:00', '14:00', '22:19']:
+                if current_time in ['09:00', '14:00', '20:00']:
                     try:
                         result = self.servises.get_birthdays()
                     except Exception as e:
