@@ -66,7 +66,7 @@ class Handler:
                     if result:
                         for data in result:
                             try:
-                                self.bot.send_message(data.user_id, data.name_str)
+                                self.bot.send_message(data.user_id, data.data_str)
                             except Exception as e:
                                 print(e)
                 time.sleep(60)
