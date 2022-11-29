@@ -55,4 +55,9 @@ class Repository ():
         cursor.execute(query, query_args)
         return cursor.fetchall() 
 
+    @cursor_handler
+    def get_all_user_ids(self, cursor):
+        query = 'SELECT DISTINCT user_id FROM birthday_friends'
+        cursor.execute(query)
+        return cursor.fetchall()
 
