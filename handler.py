@@ -21,12 +21,16 @@ class Handler:
         while True:
             try:
                 self.bot.polling(none_stop=True, interval=0)
-            except:
+            except Exception as e:
+                print(e)
                 time.sleep(5)
 
     def init_text_handler(self, message):
         if message.text == 'All birthday':
             self.all_birthdays(message)
+        elif message.text.startswith('ADMIN MESSAGE: ') and \
+            str(message.chat.id) == os.getenv("ADMIN_USER_ID"):
+            self.admin_message(message)
         else:
             self.add_birthday_date(message)
 
@@ -54,7 +58,7 @@ class Handler:
             try:
                 now = datetime.now() 
                 current_time = now.strftime("%H:%M")
-                if current_time in ['09:00', '13:00', '21:57']:
+                if current_time in ['09:00', '14:00', '20:00']:
                     try:
                         result = self.servises.get_birthdays()
                     except Exception as e:
@@ -63,10 +67,11 @@ class Handler:
                         for data in result:
                             try:
                                 self.bot.send_message(data.user_id, data.name_str)
-                            except: 
-                                pass
+                            except Exception as e:
+                                print(e)
                 time.sleep(60)
-            except:
+            except Exception as e:
+                print(e)
                 time.sleep(5)
                
     def greetings(self, message):
@@ -76,6 +81,16 @@ class Handler:
         except Exception as e:
             self.bot.send_message(message.chat.id, 'An error has occurred')
             self.bot.send_message(os.getenv("ADMIN_USER_ID"), e)
+
+    def admin_message(self, message):
+            result = self.servises.get_all_user_ids()
+            message.text = message.text.replace('ADMIN MESSAGE: ', '')
+            for user_id in result:
+                self.bot.send_message(user_id, message.text)
+
+        
+
+               
       
 
 

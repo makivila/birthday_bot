@@ -59,6 +59,13 @@ class Service():
 Example: Ivanov Ivan - 24.06.2000'''
         return answer
 
+    def get_all_user_ids(self):
+        result = self.repository.get_all_user_ids()
+        all_user_ids = []
+        for user_id_dict in result:
+            all_user_ids.append(user_id_dict[0])
+        return all_user_ids
+
 
 
         
